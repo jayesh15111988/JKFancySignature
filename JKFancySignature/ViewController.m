@@ -7,21 +7,42 @@
 //
 
 #import "ViewController.h"
+#import "JKFancySignatureView.h"
 
 @interface ViewController ()
-
+@property (weak, nonatomic) IBOutlet UIImageView *signatureImageView;
+@property (strong, nonatomic) JKFancySignatureView* vi;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    //self.vi = [[JKFancySignatureView alloc] initWithStrokeSize:2.0 andSignatureStrokeColor:[UIColor blackColor]];
+    self.vi = [[JKFancySignatureView alloc] initWithStrokeSize:10.0 andSignatureImage:[UIImage imageNamed:@"airlinePlaceholder"]];
+    self.vi.translatesAutoresizingMaskIntoConstraints = NO;
+    self.vi.backgroundColor = [UIColor lightGrayColor];
+    [self.view addSubview:self.vi];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_vi]|" options:kNilOptions metrics:kNilOptions views:NSDictionaryOfVariableBindings(_vi)]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[_vi(200)]" options:kNilOptions metrics:kNilOptions views:NSDictionaryOfVariableBindings(_vi)]];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (IBAction)createNewSignature:(id)sender {
+    [self.vi createNewSignature];
 }
+
+- (IBAction)signatureImageAction:(id)sender {
+    [self.signatureImageView setImage:[self.vi outputSignatureImage]];
+}
+
+- (IBAction)createSignatureVideoAction:(id)sender {
+    [self.vi createVideoForCurrentSignatureWithCompletionBlock:^(JKFancySignatureVideo* outputVideoObject) {
+        
+    
+    } andErrorBlock:^(NSError *error) {
+        
+    }];
+}
+
 
 @end

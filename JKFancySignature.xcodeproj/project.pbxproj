@@ -14,6 +14,11 @@
 		38A4CBB81B4F634E00C4A7EC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38A4CBB71B4F634E00C4A7EC /* Images.xcassets */; };
 		38A4CBBB1B4F634E00C4A7EC /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38A4CBB91B4F634E00C4A7EC /* LaunchScreen.xib */; };
 		38A4CBC71B4F634E00C4A7EC /* JKFancySignatureTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 38A4CBC61B4F634E00C4A7EC /* JKFancySignatureTests.m */; };
+		38A4CBD21B50136C00C4A7EC /* SampleClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 38A4CBD11B50136C00C4A7EC /* SampleClass.m */; };
+		38A4CBD61B503F9E00C4A7EC /* JKFancySignatureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38A4CBD51B503F9E00C4A7EC /* JKFancySignatureView.m */; };
+		38B672431B532BCF00F6F1F9 /* JKFancySignatureVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B672421B532BCF00F6F1F9 /* JKFancySignatureVideo.m */; };
+		38B672451B5336A700F6F1F9 /* airlinePlaceholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 38B672441B5336A700F6F1F9 /* airlinePlaceholder.png */; };
+		38EAAD021B52C58F00A3A912 /* ASScreenRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 38EAAD011B52C58F00A3A912 /* ASScreenRecorder.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +45,15 @@
 		38A4CBC01B4F634E00C4A7EC /* JKFancySignatureTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JKFancySignatureTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		38A4CBC51B4F634E00C4A7EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		38A4CBC61B4F634E00C4A7EC /* JKFancySignatureTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JKFancySignatureTests.m; sourceTree = "<group>"; };
+		38A4CBD01B50136C00C4A7EC /* SampleClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleClass.h; sourceTree = "<group>"; };
+		38A4CBD11B50136C00C4A7EC /* SampleClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleClass.m; sourceTree = "<group>"; };
+		38A4CBD41B503F9E00C4A7EC /* JKFancySignatureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKFancySignatureView.h; sourceTree = "<group>"; };
+		38A4CBD51B503F9E00C4A7EC /* JKFancySignatureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKFancySignatureView.m; sourceTree = "<group>"; };
+		38B672411B532BCF00F6F1F9 /* JKFancySignatureVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKFancySignatureVideo.h; sourceTree = "<group>"; };
+		38B672421B532BCF00F6F1F9 /* JKFancySignatureVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKFancySignatureVideo.m; sourceTree = "<group>"; };
+		38B672441B5336A700F6F1F9 /* airlinePlaceholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = airlinePlaceholder.png; sourceTree = "<group>"; };
+		38EAAD001B52C58F00A3A912 /* ASScreenRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASScreenRecorder.h; sourceTree = "<group>"; };
+		38EAAD011B52C58F00A3A912 /* ASScreenRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASScreenRecorder.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,14 +95,18 @@
 		38A4CBA91B4F634E00C4A7EC /* JKFancySignature */ = {
 			isa = PBXGroup;
 			children = (
+				38A4CBD31B503F7B00C4A7EC /* Classes */,
 				38A4CBAE1B4F634E00C4A7EC /* AppDelegate.h */,
 				38A4CBAF1B4F634E00C4A7EC /* AppDelegate.m */,
 				38A4CBB11B4F634E00C4A7EC /* ViewController.h */,
 				38A4CBB21B4F634E00C4A7EC /* ViewController.m */,
 				38A4CBB41B4F634E00C4A7EC /* Main.storyboard */,
+				38B672441B5336A700F6F1F9 /* airlinePlaceholder.png */,
 				38A4CBB71B4F634E00C4A7EC /* Images.xcassets */,
 				38A4CBB91B4F634E00C4A7EC /* LaunchScreen.xib */,
 				38A4CBAA1B4F634E00C4A7EC /* Supporting Files */,
+				38A4CBD01B50136C00C4A7EC /* SampleClass.h */,
+				38A4CBD11B50136C00C4A7EC /* SampleClass.m */,
 			);
 			path = JKFancySignature;
 			sourceTree = "<group>";
@@ -117,6 +135,27 @@
 				38A4CBC51B4F634E00C4A7EC /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		38A4CBD31B503F7B00C4A7EC /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				38EAACFF1B52C57200A3A912 /* Screen Recorder */,
+				38A4CBD41B503F9E00C4A7EC /* JKFancySignatureView.h */,
+				38A4CBD51B503F9E00C4A7EC /* JKFancySignatureView.m */,
+				38B672411B532BCF00F6F1F9 /* JKFancySignatureVideo.h */,
+				38B672421B532BCF00F6F1F9 /* JKFancySignatureVideo.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		38EAACFF1B52C57200A3A912 /* Screen Recorder */ = {
+			isa = PBXGroup;
+			children = (
+				38EAAD001B52C58F00A3A912 /* ASScreenRecorder.h */,
+				38EAAD011B52C58F00A3A912 /* ASScreenRecorder.m */,
+			);
+			name = "Screen Recorder";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -199,6 +238,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38B672451B5336A700F6F1F9 /* airlinePlaceholder.png in Resources */,
 				38A4CBB61B4F634E00C4A7EC /* Main.storyboard in Resources */,
 				38A4CBBB1B4F634E00C4A7EC /* LaunchScreen.xib in Resources */,
 				38A4CBB81B4F634E00C4A7EC /* Images.xcassets in Resources */,
@@ -219,8 +259,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38A4CBD61B503F9E00C4A7EC /* JKFancySignatureView.m in Sources */,
+				38A4CBD21B50136C00C4A7EC /* SampleClass.m in Sources */,
 				38A4CBB31B4F634E00C4A7EC /* ViewController.m in Sources */,
+				38EAAD021B52C58F00A3A912 /* ASScreenRecorder.m in Sources */,
 				38A4CBB01B4F634E00C4A7EC /* AppDelegate.m in Sources */,
+				38B672431B532BCF00F6F1F9 /* JKFancySignatureVideo.m in Sources */,
 				38A4CBAD1B4F634E00C4A7EC /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -418,6 +462,7 @@
 				38A4CBCC1B4F634E00C4A7EC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		38A4CBCD1B4F634E00C4A7EC /* Build configuration list for PBXNativeTarget "JKFancySignatureTests" */ = {
 			isa = XCConfigurationList;
@@ -426,6 +471,7 @@
 				38A4CBCF1B4F634E00C4A7EC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

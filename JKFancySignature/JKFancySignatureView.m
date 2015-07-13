@@ -12,12 +12,13 @@
 
 @interface JKFancySignatureView ()
 
-@property (strong, nonatomic) NSMutableSet* tracedPointsCollection;
+@property (strong, nonatomic) NSMutableArray* tracedPointsCollection;
 @property (strong, nonatomic) CAShapeLayer* viewLayer;
 @property (copy, nonatomic) UIBezierPath* bezierPath;
 @property (strong, nonatomic) NSDate* operationStartDate;
 @property (strong, nonatomic) NSDate* operationEndDate;
 @property (copy, nonatomic) UIBezierPath* originalBezierPath;
+@property (strong, nonatomic) NSMutableArray* originalTracedPointsCollection;
 @property (strong, nonatomic) CAShapeLayer *progressLayer;
 @property (strong, nonatomic) CALayer* signatureTraceLayer;
 @property (strong, nonatomic) UIImage* signatureImage;
@@ -26,6 +27,7 @@
 @property (assign, nonatomic) BOOL signatureDone;
 @property (assign, nonatomic) double totalSignatureTime;
 @property (assign, nonatomic) BOOL isCreatingSignatureVideo;
+@property (strong, nonatomic) NSTimer* timer;
 
 @end
 
@@ -63,8 +65,13 @@
 }
 
 - (void)clearOriginalBezierPathCollection {
-    [self.originalBezierPath removeAllPoints];
-    self.viewLayer.path = self.originalBezierPath.CGPath;
+    if (self.selectedSignatureMode == SignatureModePlain) {
+        [self.originalBezierPath removeAllPoints];
+        self.viewLayer.path = self.originalBezierPath.CGPath;
+    } else {
+        [self.tracedPointsCollection removeAllObjects];
+        [self setNeedsDisplay];
+    }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -90,16 +97,27 @@
 - (void)completeSignatureCreationOperation {
     if (!self.signatureDone) {
         self.signatureDone = YES;
-        self.originalBezierPath = self.bezierPath;
+        if (self.selectedSignatureMode == SignatureModePlain) {
+            self.originalBezierPath = self.bezierPath;
+        } else {
+            self.originalTracedPointsCollection = [self.tracedPointsCollection mutableCopy];
+        }
     }
 }
 
 - (void)createNewSignature {
     self.totalSignatureTime = 0;
-    [self.originalBezierPath removeAllPoints];
-    [self.bezierPath removeAllPoints];
-    self.viewLayer.path = self.originalBezierPath.CGPath;
     self.signatureDone = NO;
+    
+    if (self.selectedSignatureMode == SignatureModePlain) {
+        [self.originalBezierPath removeAllPoints];
+        [self.bezierPath removeAllPoints];
+        self.viewLayer.path = self.originalBezierPath.CGPath;
+    } else {
+        [self.tracedPointsCollection removeAllObjects];
+        [self.originalTracedPointsCollection removeAllObjects];
+        [self setNeedsDisplay];
+    }
 }
 
 - (void)tracePathWithLine {
@@ -162,27 +180,31 @@
             [self.progressLayer removeFromSuperlayer];
             self.viewLayer.path = self.originalBezierPath.CGPath;
             
-            if (self.isCreatingSignatureVideo) {
-                self.isCreatingSignatureVideo = NO;
-                [[ASScreenRecorder sharedInstance] stopRecordingWithCompletion:^(NSString *outputVideoPath) {
-                    if (self.videoRecordingCompletion) {
-                        
-                        NSError* error;
-                        NSMutableDictionary* fileAttributes = [[[NSFileManager defaultManager] attributesOfItemAtPath:outputVideoPath error:&error] mutableCopy];
-                        if (!error) {
-                            fileAttributes[@"storagePath"] = outputVideoPath;
-                            JKFancySignatureVideo* signatureVideoObject = [[JKFancySignatureVideo alloc] initWithDictionary:fileAttributes];
-                            self.videoRecordingCompletion(signatureVideoObject);
-                        } else {
-                            self.videoRecordingErrorOperation(error);
-                        }
-                    }
-                }];
-            }
+            [self stopRecordingAndProduceVideoOutputFile];
             
         } else if ([[animation valueForKey:@"type"] isEqualToString:@"pointAnimation"]){
             [self.signatureTraceLayer removeFromSuperlayer];
         }
+    }
+}
+
+- (void)stopRecordingAndProduceVideoOutputFile {
+    if (self.isCreatingSignatureVideo) {
+        self.isCreatingSignatureVideo = NO;
+        [[ASScreenRecorder sharedInstance] stopRecordingWithCompletion:^(NSString *outputVideoPath) {
+            if (self.videoRecordingCompletion) {
+                
+                NSError* error;
+                NSMutableDictionary* fileAttributes = [[[NSFileManager defaultManager] attributesOfItemAtPath:outputVideoPath error:&error] mutableCopy];
+                if (!error) {
+                    fileAttributes[@"storagePath"] = outputVideoPath;
+                    JKFancySignatureVideo* signatureVideoObject = [[JKFancySignatureVideo alloc] initWithDictionary:fileAttributes];
+                    self.videoRecordingCompletion(signatureVideoObject);
+                } else {
+                    self.videoRecordingErrorOperation(error);
+                }
+            }
+        }];
     }
 }
 
@@ -212,7 +234,7 @@
 - (instancetype)initWithStrokeSize:(CGFloat)signatureStrokeSize andSignatureImage:(UIImage*)signatureImage {
     if (self = [super init]) {
         self.selectedSignatureMode = SignatureModeImage;
-        NSAssert(signatureImage != nil, @"Initizlier signatureStrokeSize andSignatureImage should be invoked with non-nil signatureImage for signature to appear on the viewport");
+        NSAssert(signatureImage != nil, @"Initizlier signatureStrokeSize andSignatureImage should be invoked with non-nil signatureImage");
         self.signatureStrokeSize = signatureStrokeSize;
         self.signatureImage = signatureImage;
         [self initializeViewLayer];
@@ -228,7 +250,7 @@
     self.isCreatingSignatureVideo = NO;
     UILongPressGestureRecognizer* longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(clearSignature)];
     [self addGestureRecognizer:longPressGestureRecognizer];
-    self.tracedPointsCollection = [NSMutableSet set];
+    self.tracedPointsCollection = [NSMutableArray new];
     self.bezierPath = [UIBezierPath bezierPath];
 }
 
@@ -267,9 +289,27 @@
     if (self.selectedSignatureMode == SignatureModePlain) {
         [self tracePathWithLine];
     } else {
-        
+        [self clearSignature];
+        NSTimeInterval timeInterval = self.totalSignatureTime / self.originalTracedPointsCollection.count;
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(drawPath:) userInfo:nil repeats:YES];
     }
 }
+
+- (void)drawPath:(NSTimer*)timer {
+    if (self.originalTracedPointsCollection.count) {
+        NSValue* pointValue = [self.originalTracedPointsCollection firstObject];
+        [self.tracedPointsCollection addObject:pointValue];
+        [self setNeedsDisplayInRect:[self getRectFromPoint:[pointValue CGPointValue]]];
+        [self.originalTracedPointsCollection removeObjectAtIndex:0];
+    } else {
+        [self.timer invalidate];
+        self.timer = nil;
+        self.originalTracedPointsCollection = [self.tracedPointsCollection mutableCopy];
+        [self.tracedPointsCollection removeAllObjects];
+        [self stopRecordingAndProduceVideoOutputFile];
+    }
+}
+
 
 - (void)updateStrokeColorWithColor:(UIColor*)updatedStrokeColor {
     self.signatureStrokeColor = updatedStrokeColor;

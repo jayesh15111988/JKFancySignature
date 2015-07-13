@@ -14,7 +14,7 @@ typedef void (^VideoCompletionBlock)(NSString* outputVideoPath);
 
 @interface ASScreenRecorder : NSObject
 @property (nonatomic, readonly) BOOL isRecording;
-
+@property (nonatomic, strong) NSString* videoFileName;
 // delegate is only required when implementing ASScreenRecorderDelegate - see below
 @property (nonatomic, weak) id <ASScreenRecorderDelegate> delegate;
 

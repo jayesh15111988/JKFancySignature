@@ -162,7 +162,12 @@
 
 - (NSURL*)tempFileURL
 {
-    NSString *outputPath = [NSHomeDirectory() stringByAppendingPathComponent:@"tmp/screenCapture.mp4"];
+    NSString* outputVideoFileName = @"screenCapture";
+    if (self.videoFileName && self.videoFileName.length) {
+        outputVideoFileName = self.videoFileName;
+    }
+    
+    NSString *outputPath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"tmp/%@.mp4", outputVideoFileName]];
     [self removeTempFilePath:outputPath];
     return [NSURL fileURLWithPath:outputPath];
 }

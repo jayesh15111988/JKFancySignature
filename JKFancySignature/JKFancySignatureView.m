@@ -28,6 +28,7 @@
 @property (assign, nonatomic) double totalSignatureTime;
 @property (assign, nonatomic) BOOL isCreatingSignatureVideo;
 @property (strong, nonatomic) NSTimer* timer;
+@property (strong, nonatomic) UIActivityIndicatorView* activityIndicator;
 
 @end
 
@@ -95,6 +96,10 @@
 }
 
 - (void)completeSignatureCreationOperation {
+    [self markSignatureDone];
+}
+
+- (void)markSignatureDone {
     if (!self.signatureDone) {
         self.signatureDone = YES;
         if (self.selectedSignatureMode == SignatureModePlain) {
@@ -122,6 +127,7 @@
 
 - (void)tracePathWithLine {
     [self clearSignature];
+    
     self.progressLayer = [[CAShapeLayer alloc] init];
     [self.progressLayer setPath: self.originalBezierPath.CGPath];
     [self.progressLayer setStrokeColor:self.signatureStrokeColor.CGColor];
@@ -153,12 +159,13 @@
     CABasicAnimation* colorChangeAnimation = [CABasicAnimation animation];
     colorChangeAnimation.keyPath = @"backgroundColor";
     colorChangeAnimation.toValue = (__bridge id) [UIColor blueColor].CGColor;
-    
+    colorChangeAnimation.removedOnCompletion = YES;
     
     //Usually use this approach for perform rotation while animating stuff
     CABasicAnimation* rotationAnimation = [CABasicAnimation animation];
     rotationAnimation.keyPath = @"transform.rotation";
     rotationAnimation.byValue = @(M_PI*2);
+    rotationAnimation.removedOnCompletion = YES;
     
     CAKeyframeAnimation* animation = [CAKeyframeAnimation animation];
     animation.keyPath = @"position";
@@ -170,6 +177,7 @@
     animationGroup.animations = @[colorChangeAnimation, animation];
     animationGroup.duration = self.totalSignatureTime;
     animationGroup.delegate = self;
+    animationGroup.removedOnCompletion = YES;
     [animationGroup setValue:@"pointAnimation" forKey:@"type"];
     [self.signatureTraceLayer addAnimation:animationGroup forKey:nil];
 }
@@ -191,6 +199,7 @@
 - (void)stopRecordingAndProduceVideoOutputFile {
     if (self.isCreatingSignatureVideo) {
         self.isCreatingSignatureVideo = NO;
+        [self.activityIndicator stopAnimating];
         [[ASScreenRecorder sharedInstance] stopRecordingWithCompletion:^(NSString *outputVideoPath) {
             if (self.videoRecordingCompletion) {
                 
@@ -248,6 +257,18 @@
     self.totalSignatureTime = 0;
     self.clipsToBounds = YES;
     self.isCreatingSignatureVideo = NO;
+    self.activityIndicator = [UIActivityIndicatorView new];
+    self.activityIndicator.hidesWhenStopped = YES;
+    self.activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+    [self.activityIndicator stopAnimating];
+    [self addSubview:self.activityIndicator];
+    self.activityIndicator.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.activityIndicator attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
+    
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.activityIndicator attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0]];
+    
+    
     UILongPressGestureRecognizer* longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(clearSignature)];
     [self addGestureRecognizer:longPressGestureRecognizer];
     self.tracedPointsCollection = [NSMutableArray new];
@@ -279,19 +300,23 @@
 }
 
 - (void)createVideoForCurrentSignatureWithCompletionBlock:(void (^)(JKFancySignatureVideo* outputVideoObject))completion andErrorBlock:(void (^)(NSError *))error {
-    [self completeSignatureCreationOperation];
-    self.videoRecordingCompletion = completion;
-    self.videoRecordingErrorOperation = error;
-    self.isCreatingSignatureVideo = YES;
-    ASScreenRecorder* screenRecorder = [ASScreenRecorder sharedInstance];
-    [screenRecorder startRecording];
-    
-    if (self.selectedSignatureMode == SignatureModePlain) {
-        [self tracePathWithLine];
-    } else {
-        [self clearSignature];
-        NSTimeInterval timeInterval = self.totalSignatureTime / self.originalTracedPointsCollection.count;
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(drawPath:) userInfo:nil repeats:YES];
+    if (!self.isCreatingSignatureVideo) {
+        [self.activityIndicator startAnimating];
+        [self completeSignatureCreationOperation];
+        self.videoRecordingCompletion = completion;
+        self.videoRecordingErrorOperation = error;
+        self.isCreatingSignatureVideo = YES;
+        ASScreenRecorder* screenRecorder = [ASScreenRecorder sharedInstance];
+        [screenRecorder startRecording];
+        screenRecorder.videoFileName = self.videoFileName;
+        
+        if (self.selectedSignatureMode == SignatureModePlain) {
+            [self tracePathWithLine];
+        } else {
+            [self clearSignature];
+            NSTimeInterval timeInterval = self.totalSignatureTime / self.originalTracedPointsCollection.count;
+            self.timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(drawPath:) userInfo:nil repeats:YES];
+        }
     }
 }
 

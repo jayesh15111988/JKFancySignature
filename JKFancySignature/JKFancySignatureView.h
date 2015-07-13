@@ -20,6 +20,7 @@ typedef NSInteger SignatureMode;
 
 @property (assign, nonatomic) SignatureMode selectedSignatureMode;
 @property (strong, nonatomic) UIColor* signatureFillColor;
+@property (strong, nonatomic) NSString* videoFileName;
 typedef void (^VideoRecordingCompletionBlock)(JKFancySignatureVideo* signatureVideoObject);
 @property (strong, nonatomic) VideoRecordingCompletionBlock videoRecordingCompletion;
 typedef void (^VideoRecordingErrorBlock)(NSError* error);
@@ -32,6 +33,7 @@ typedef void (^VideoRecordingErrorBlock)(NSError* error);
 - (void)updateSignatureImageWithImage:(UIImage*)signatureImage;
 
 - (void)clearSignature;
+- (void)markSignatureDone;
 - (UIImage*)outputSignatureImage;
 - (void)createNewSignature;
 - (void)tracePathWithLine;

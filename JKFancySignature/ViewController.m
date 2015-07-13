@@ -18,8 +18,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //self.vi = [[JKFancySignatureView alloc] initWithStrokeSize:2.0 andSignatureStrokeColor:[UIColor blackColor]];
-    self.vi = [[JKFancySignatureView alloc] initWithStrokeSize:10.0 andSignatureImage:[UIImage imageNamed:@"airlinePlaceholder"]];
+    self.vi = [[JKFancySignatureView alloc] initWithStrokeSize:2.0 andSignatureStrokeColor:[UIColor blackColor]];
+    self.vi.videoFileName = @"jayesh";
+    //self.vi = [[JKFancySignatureView alloc] initWithStrokeSize:10.0 andSignatureImage:[UIImage imageNamed:@"airlinePlaceholder"]];
     self.vi.translatesAutoresizingMaskIntoConstraints = NO;
     self.vi.backgroundColor = [UIColor lightGrayColor];
     [self.view addSubview:self.vi];

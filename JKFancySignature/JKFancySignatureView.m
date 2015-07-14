@@ -50,7 +50,6 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
-    
     if (self.signatureDone) {
         [self createNewSignature];
     }
@@ -128,25 +127,57 @@
 - (void)tracePathWithLine {
     [self clearSignature];
     
-    self.progressLayer = [[CAShapeLayer alloc] init];
+    if (!self.progressLayer) {
+        [self setupProgressLayer];
+    }
+    
+    [self setupAttributesForProgressLayer];
+    [self.progressLayer addAnimation:[self animationWithTypeName:@"lineAnimation" andDrawingOnScene:YES] forKey:nil];
+}
+
+- (void)setupAttributesForProgressLayer {
     [self.progressLayer setPath: self.originalBezierPath.CGPath];
     [self.progressLayer setStrokeColor:self.signatureStrokeColor.CGColor];
     [self.progressLayer setFillColor:self.signatureFillColor.CGColor];
     [self.progressLayer setLineWidth:self.signatureStrokeSize];
-    [self.progressLayer setStrokeStart:0.0];
-    [self.progressLayer setStrokeEnd:1.0];
-    
     [self.layer addSublayer:self.progressLayer];
+}
+
+- (void)undoSignature {
+    [self completeSignatureCreationOperation];
+    [self clearSignature];
     
+    if (!self.progressLayer) {
+        [self setupProgressLayer];
+        [self setupAttributesForProgressLayer];
+    } else {
+        [self.progressLayer setPath: self.originalBezierPath.CGPath];
+        [self.layer addSublayer:self.progressLayer];
+    }
     
+    [self.progressLayer addAnimation:[self animationWithTypeName:@"lineAnimationRemoval" andDrawingOnScene:NO] forKey:nil];
+}
+
+- (CABasicAnimation*)animationWithTypeName:(NSString*)type andDrawingOnScene:(BOOL)drawing {
     CABasicAnimation *animateStrokeEnd = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
     animateStrokeEnd.duration  = self.totalSignatureTime;
-    animateStrokeEnd.fromValue = [NSNumber numberWithFloat:0.0f];
-    animateStrokeEnd.toValue   = [NSNumber numberWithFloat:1.0f];
+    if (drawing) {
+        animateStrokeEnd.fromValue = [NSNumber numberWithFloat:0.0f];
+        animateStrokeEnd.toValue   = [NSNumber numberWithFloat:1.0f];
+    } else {
+        animateStrokeEnd.fromValue = [NSNumber numberWithFloat:1.0f];
+        animateStrokeEnd.toValue   = [NSNumber numberWithFloat:0.0f];
+    }
     animateStrokeEnd.removedOnCompletion = YES;
     animateStrokeEnd.delegate = self;
-    [animateStrokeEnd setValue:@"lineAnimation" forKey:@"type"];
-    [self.progressLayer addAnimation:animateStrokeEnd forKey:nil];
+    [animateStrokeEnd setValue:type forKey:@"type"];
+    return animateStrokeEnd;
+}
+
+- (void)setupProgressLayer {
+    self.progressLayer = [[CAShapeLayer alloc] init];
+    [self.progressLayer setStrokeStart:0.0];
+    [self.progressLayer setStrokeEnd:1.0];
 }
 
 - (void)tracePathWithPoint {
@@ -192,6 +223,9 @@
             
         } else if ([[animation valueForKey:@"type"] isEqualToString:@"pointAnimation"]){
             [self.signatureTraceLayer removeFromSuperlayer];
+        } else if ([[animation valueForKey:@"type"] isEqualToString:@"lineAnimationRemoval"]) {
+            [self.progressLayer removeFromSuperlayer];
+            [self clearSignature];
         }
     }
 }
@@ -227,6 +261,7 @@
             [self setNeedsDisplay];
         }
     }
+    self.totalSignatureTime = 0;
 }
 
 - (instancetype)initWithStrokeSize:(CGFloat)signatureStrokeSize andSignatureStrokeColor:(UIColor*)signatureStrokeColor {
@@ -264,15 +299,16 @@
     [self addSubview:self.activityIndicator];
     self.activityIndicator.translatesAutoresizingMaskIntoConstraints = NO;
     
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.activityIndicator attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_activityIndicator]" options:NSLayoutFormatAlignAllLeft metrics:nil views:NSDictionaryOfVariableBindings(_activityIndicator)]];
     
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.activityIndicator attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_activityIndicator]" options:NSLayoutFormatAlignAllTop metrics:nil views:NSDictionaryOfVariableBindings(_activityIndicator)]];
     
     
     UILongPressGestureRecognizer* longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(clearSignature)];
     [self addGestureRecognizer:longPressGestureRecognizer];
     self.tracedPointsCollection = [NSMutableArray new];
     self.bezierPath = [UIBezierPath bezierPath];
+    
 }
 
 - (void)initializeViewLayer {

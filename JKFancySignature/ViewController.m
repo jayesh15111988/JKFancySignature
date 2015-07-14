@@ -45,5 +45,10 @@
     }];
 }
 
+- (IBAction)undoSignature:(id)sender {
+    [self.vi undoSignature];
+}
+
+
 
 @end

@@ -35,6 +35,7 @@ typedef void (^VideoRecordingErrorBlock)(NSError* error);
 - (void)clearSignature;
 - (void)markSignatureDone;
 - (UIImage*)outputSignatureImage;
+- (void)undoSignature;
 - (void)createNewSignature;
 - (void)tracePathWithLine;
 - (void)tracePathWithPoint;

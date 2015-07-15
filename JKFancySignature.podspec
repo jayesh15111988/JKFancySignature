@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.social_media_url   = "http://twitter.com/JayeshKawli"
   s.platform     = :ios, "7.0"
   s.source       = { :git => "https://github.com/jayesh15111988/JKFancySignature.git", :branch => "master" }
-  s.source_files  = "JKFancySignature/Classes/{SignatureClasses, ScreenRecorder}/*.{h,m}"
+  s.source_files  = "JKFancySignature/Classes/**/*.{h,m}"
   #s.resource  = "icon.png"
   #s.resources = "JKFancySignature/images/*.{png, jpg, jpeg}"
   s.requires_arc = true

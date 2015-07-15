@@ -74,7 +74,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		386073FC1B55F45E00C7281F /* Signature Classes */ = {
+		386073FC1B55F45E00C7281F /* SignatureClasses */ = {
 			isa = PBXGroup;
 			children = (
 				38A4CBD41B503F9E00C4A7EC /* JKFancySignatureView.h */,
@@ -82,7 +82,8 @@
 				38B672411B532BCF00F6F1F9 /* JKFancySignatureVideo.h */,
 				38B672421B532BCF00F6F1F9 /* JKFancySignatureVideo.m */,
 			);
-			name = "Signature Classes";
+			name = SignatureClasses;
+			path = "Signature Classes";
 			sourceTree = "<group>";
 		};
 		38A4CB9E1B4F634E00C4A7EC = {
@@ -128,7 +129,7 @@
 				38A4CBAB1B4F634E00C4A7EC /* Info.plist */,
 				38A4CBAC1B4F634E00C4A7EC /* main.m */,
 			);
-			name = "Supporting Files";
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		38A4CBC31B4F634E00C4A7EC /* JKFancySignatureTests */ = {
@@ -145,25 +146,26 @@
 			children = (
 				38A4CBC51B4F634E00C4A7EC /* Info.plist */,
 			);
-			name = "Supporting Files";
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		38A4CBD31B503F7B00C4A7EC /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				386073FC1B55F45E00C7281F /* Signature Classes */,
-				38EAACFF1B52C57200A3A912 /* Screen Recorder */,
+				386073FC1B55F45E00C7281F /* SignatureClasses */,
+				38EAACFF1B52C57200A3A912 /* ScreenRecorder */,
 			);
-			name = Classes;
+			path = Classes;
 			sourceTree = "<group>";
 		};
-		38EAACFF1B52C57200A3A912 /* Screen Recorder */ = {
+		38EAACFF1B52C57200A3A912 /* ScreenRecorder */ = {
 			isa = PBXGroup;
 			children = (
 				38EAAD001B52C58F00A3A912 /* ASScreenRecorder.h */,
 				38EAAD011B52C58F00A3A912 /* ASScreenRecorder.m */,
 			);
-			name = "Screen Recorder";
+			name = ScreenRecorder;
+			path = "Screen Recorder";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -302,6 +304,7 @@
 				38A4CBB51B4F634E00C4A7EC /* Base */,
 			);
 			name = Main.storyboard;
+			path = .;
 			sourceTree = "<group>";
 		};
 		38A4CBB91B4F634E00C4A7EC /* LaunchScreen.xib */ = {
@@ -310,6 +313,7 @@
 				38A4CBBA1B4F634E00C4A7EC /* Base */,
 			);
 			name = LaunchScreen.xib;
+			path = .;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -401,7 +405,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_FILE = JKFancySignature/Info.plist;
+				INFOPLIST_FILE = "JKFancySignature/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -411,7 +415,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_FILE = JKFancySignature/Info.plist;
+				INFOPLIST_FILE = "JKFancySignature/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -429,7 +433,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = JKFancySignatureTests/Info.plist;
+				INFOPLIST_FILE = "JKFancySignatureTests/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JKFancySignature.app/JKFancySignature";
@@ -444,7 +448,7 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = JKFancySignatureTests/Info.plist;
+				INFOPLIST_FILE = "JKFancySignatureTests/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JKFancySignature.app/JKFancySignature";

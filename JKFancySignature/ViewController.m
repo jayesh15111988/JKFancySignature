@@ -29,7 +29,7 @@
 }
 
 - (IBAction)createNewSignature:(id)sender {
-    [self.vi createNewSignature];
+    [self.vi clearPreviousSignature];
 }
 
 - (IBAction)signatureImageAction:(id)sender {
@@ -43,6 +43,14 @@
     } andErrorBlock:^(NSError *error) {
         
     }];
+}
+
+- (IBAction)undoSignature:(id)sender {
+    [self.vi undoSignature];
+}
+
+- (IBAction)traceSignatureWithPoint:(id)sender {
+    [self.vi tracePathWithPoint];
 }
 
 

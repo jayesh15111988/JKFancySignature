@@ -10,25 +10,32 @@
 #import "ASScreenRecorder.h"
 #import "JKFancySignatureVideo.h"
 
+enum {
+    SignatureModePlain,
+    SignatureModeImage
+};
+typedef NSInteger SignatureMode;
+
 @interface JKFancySignatureView ()
 
-@property (strong, nonatomic) NSMutableArray* tracedPointsCollection;
-@property (strong, nonatomic) CAShapeLayer* viewLayer;
-@property (copy, nonatomic) UIBezierPath* bezierPath;
-@property (strong, nonatomic) NSDate* operationStartDate;
-@property (strong, nonatomic) NSDate* operationEndDate;
-@property (copy, nonatomic) UIBezierPath* originalBezierPath;
-@property (strong, nonatomic) NSMutableArray* originalTracedPointsCollection;
-@property (strong, nonatomic) CAShapeLayer *progressLayer;
-@property (strong, nonatomic) CALayer* signatureTraceLayer;
-@property (strong, nonatomic) UIImage* signatureImage;
-@property (strong, nonatomic) UIColor* signatureStrokeColor;
-@property (assign, nonatomic) CGFloat signatureStrokeSize;
-@property (assign, nonatomic) BOOL signatureDone;
-@property (assign, nonatomic) double totalSignatureTime;
-@property (assign, nonatomic) BOOL isCreatingSignatureVideo;
 @property (strong, nonatomic) NSTimer* timer;
 @property (strong, nonatomic) UIActivityIndicatorView* activityIndicator;
+@property (strong, nonatomic) NSDate* operationStartDate;
+@property (strong, nonatomic) NSDate* operationEndDate;
+@property (copy, nonatomic) UIBezierPath* bezierPath;
+@property (copy, nonatomic) UIBezierPath* originalBezierPath;
+@property (strong, nonatomic) CALayer* signatureTraceLayer;
+@property (strong, nonatomic) CAShapeLayer* viewLayer;
+@property (strong, nonatomic) CAShapeLayer *progressLayer;
+@property (strong, nonatomic) NSMutableArray* tracedPointsCollection;
+@property (strong, nonatomic) NSMutableArray* originalTracedPointsCollection;
+@property (strong, nonatomic) UIImage* signatureImage;
+@property (strong, nonatomic) UIColor* signatureStrokeColor;
+@property (assign, nonatomic) SignatureMode selectedSignatureMode;
+@property (assign, nonatomic) CGFloat signatureStrokeSize;
+@property (assign, nonatomic) double totalSignatureTime;
+@property (assign, nonatomic) BOOL isCreatingSignatureVideo;
+@property (assign, nonatomic) BOOL signatureDone;
 
 @end
 
@@ -37,40 +44,30 @@
 - (void)drawRect:(CGRect)rect {
     for(NSValue* tracedPointValue in self.tracedPointsCollection) {
         CGPoint currentPoint = [tracedPointValue CGPointValue];
-        CGRect rectangleToPaint = [self getRectFromPoint:currentPoint];
-            if(CGRectIntersectsRect(rectangleToPaint, rect)){
-                [self.signatureImage drawInRect:[self getRectFromPoint:currentPoint]];
-            }
+        CGRect rectangleToPaint = [self rectFromPoint:currentPoint];
+        if(CGRectIntersectsRect(rectangleToPaint, rect)){
+            [self.signatureImage drawInRect:rectangleToPaint];
+        }
     }
 }
 
-- (CGRect)getRectFromPoint:(CGPoint)inputPoint {
+- (CGRect)rectFromPoint:(CGPoint)inputPoint {
     return CGRectMake(inputPoint.x - self.signatureStrokeSize, inputPoint.y - self.signatureStrokeSize, self.signatureStrokeSize, self.signatureStrokeSize);
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
     if (self.signatureDone) {
-        [self createNewSignature];
+        [self clearPreviousSignature];
     }
     
-    CGPoint touchBeginPoint = [[touches anyObject] locationInView:self];
     self.operationStartDate = [NSDate date];
+    CGPoint touchBeginPoint = [[touches anyObject] locationInView:self];
     
     if(self.selectedSignatureMode == SignatureModePlain) {
         [self.bezierPath moveToPoint:touchBeginPoint];
     } else {
         [self.tracedPointsCollection addObject:[NSValue valueWithCGPoint:touchBeginPoint]];
-    }
-}
-
-- (void)clearOriginalBezierPathCollection {
-    if (self.selectedSignatureMode == SignatureModePlain) {
-        [self.originalBezierPath removeAllPoints];
-        self.viewLayer.path = self.originalBezierPath.CGPath;
-    } else {
-        [self.tracedPointsCollection removeAllObjects];
-        [self setNeedsDisplay];
     }
 }
 
@@ -81,17 +78,13 @@
         self.viewLayer.path = self.bezierPath.CGPath;
     } else {
         [self.tracedPointsCollection addObject:[NSValue valueWithCGPoint:touchMovePoint]];
-        [self setNeedsDisplayInRect:[self getRectFromPoint:touchMovePoint]];
+        [self setNeedsDisplayInRect:[self rectFromPoint:touchMovePoint]];
     }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     self.operationEndDate = [NSDate date];
     _totalSignatureTime += [self.operationEndDate timeIntervalSinceDate:self.operationStartDate];
-}
-
-- (void)signatureCompleted {
-    [self completeSignatureCreationOperation];
 }
 
 - (void)completeSignatureCreationOperation {
@@ -109,13 +102,14 @@
     }
 }
 
-- (void)createNewSignature {
+- (void)clearPreviousSignature {
+    
     self.totalSignatureTime = 0;
     self.signatureDone = NO;
     
     if (self.selectedSignatureMode == SignatureModePlain) {
-        [self.originalBezierPath removeAllPoints];
         [self.bezierPath removeAllPoints];
+        [self.originalBezierPath removeAllPoints];
         self.viewLayer.path = self.originalBezierPath.CGPath;
     } else {
         [self.tracedPointsCollection removeAllObjects];
@@ -125,7 +119,7 @@
 }
 
 - (void)tracePathWithLine {
-    [self clearSignature];
+    [self markSignatureCompleteAndClearPreviousDrawing];
     
     if (!self.progressLayer) {
         [self setupProgressLayer];
@@ -143,9 +137,13 @@
     [self.layer addSublayer:self.progressLayer];
 }
 
-- (void)undoSignature {
+- (void)markSignatureCompleteAndClearPreviousDrawing {
     [self completeSignatureCreationOperation];
     [self clearSignature];
+}
+
+- (void)undoSignature {
+    [self markSignatureCompleteAndClearPreviousDrawing];
     
     if (!self.progressLayer) {
         [self setupProgressLayer];
@@ -158,9 +156,16 @@
     [self.progressLayer addAnimation:[self animationWithTypeName:@"lineAnimationRemoval" andDrawingOnScene:NO] forKey:nil];
 }
 
+- (void)setupProgressLayer {
+    self.progressLayer = [[CAShapeLayer alloc] init];
+    [self.progressLayer setStrokeStart:0.0];
+    [self.progressLayer setStrokeEnd:1.0];
+}
+
 - (CABasicAnimation*)animationWithTypeName:(NSString*)type andDrawingOnScene:(BOOL)drawing {
     CABasicAnimation *animateStrokeEnd = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    animateStrokeEnd.duration  = self.totalSignatureTime;
+    animateStrokeEnd.duration  = _totalSignatureTime;
+    
     if (drawing) {
         animateStrokeEnd.fromValue = [NSNumber numberWithFloat:0.0f];
         animateStrokeEnd.toValue   = [NSNumber numberWithFloat:1.0f];
@@ -168,23 +173,19 @@
         animateStrokeEnd.fromValue = [NSNumber numberWithFloat:1.0f];
         animateStrokeEnd.toValue   = [NSNumber numberWithFloat:0.0f];
     }
+    
     animateStrokeEnd.removedOnCompletion = YES;
     animateStrokeEnd.delegate = self;
     [animateStrokeEnd setValue:type forKey:@"type"];
     return animateStrokeEnd;
 }
 
-- (void)setupProgressLayer {
-    self.progressLayer = [[CAShapeLayer alloc] init];
-    [self.progressLayer setStrokeStart:0.0];
-    [self.progressLayer setStrokeEnd:1.0];
-}
-
 - (void)tracePathWithPoint {
+    [self completeSignatureCreationOperation];
     self.signatureTraceLayer = [CALayer layer];
-    self.signatureTraceLayer.frame = CGRectMake(0, 0, self.signatureStrokeSize * 2, self.signatureStrokeSize * 2);
+    self.signatureTraceLayer.frame = CGRectMake(0, 0, self.signatureStrokeSize * 3, self.signatureStrokeSize * 3);
     self.signatureTraceLayer.cornerRadius = self.signatureStrokeSize;
-    self.signatureTraceLayer.backgroundColor = [UIColor greenColor].CGColor;
+    self.signatureTraceLayer.backgroundColor = [UIColor redColor].CGColor;
     [self.layer addSublayer:self.signatureTraceLayer];
     
     CABasicAnimation* colorChangeAnimation = [CABasicAnimation animation];
@@ -205,8 +206,8 @@
     animation.rotationMode = kCAAnimationRotateAuto;
     
     CAAnimationGroup* animationGroup = [CAAnimationGroup animation];
-    animationGroup.animations = @[colorChangeAnimation, animation];
-    animationGroup.duration = self.totalSignatureTime;
+    animationGroup.animations = @[animation];
+    animationGroup.duration = _totalSignatureTime * 2;
     animationGroup.delegate = self;
     animationGroup.removedOnCompletion = YES;
     [animationGroup setValue:@"pointAnimation" forKey:@"type"];
@@ -218,14 +219,12 @@
         if ([[animation valueForKey:@"type"] isEqualToString:@"lineAnimation"]) {
             [self.progressLayer removeFromSuperlayer];
             self.viewLayer.path = self.originalBezierPath.CGPath;
-            
             [self stopRecordingAndProduceVideoOutputFile];
-            
         } else if ([[animation valueForKey:@"type"] isEqualToString:@"pointAnimation"]){
             [self.signatureTraceLayer removeFromSuperlayer];
         } else if ([[animation valueForKey:@"type"] isEqualToString:@"lineAnimationRemoval"]) {
             [self.progressLayer removeFromSuperlayer];
-            [self clearSignature];
+            //[self clearSignature];
         }
     }
 }
@@ -261,33 +260,35 @@
             [self setNeedsDisplay];
         }
     }
-    self.totalSignatureTime = 0;
 }
 
 - (instancetype)initWithStrokeSize:(CGFloat)signatureStrokeSize andSignatureStrokeColor:(UIColor*)signatureStrokeColor {
     if (self = [super init]) {
         self.selectedSignatureMode = SignatureModePlain;
-        self.signatureStrokeSize = signatureStrokeSize;
         self.signatureStrokeColor = signatureStrokeColor;
-        [self initializeViewLayer];
-        [self initializeContainers];
+        self.signatureStrokeSize = signatureStrokeSize;
+        [self prepareForStartup];
     }
     return self;
 }
 
 - (instancetype)initWithStrokeSize:(CGFloat)signatureStrokeSize andSignatureImage:(UIImage*)signatureImage {
     if (self = [super init]) {
-        self.selectedSignatureMode = SignatureModeImage;
         NSAssert(signatureImage != nil, @"Initizlier signatureStrokeSize andSignatureImage should be invoked with non-nil signatureImage");
-        self.signatureStrokeSize = signatureStrokeSize;
+        self.selectedSignatureMode = SignatureModeImage;
         self.signatureImage = signatureImage;
-        [self initializeViewLayer];
-        [self initializeContainers];
+        self.signatureStrokeSize = signatureStrokeSize;
+        [self prepareForStartup];
     }
     return self;
 }
 
-- (void)initializeContainers {
+- (void)prepareForStartup {
+    [self initializeViewLayer];
+    [self initializeParameters];
+}
+
+- (void)initializeParameters {
     self.signatureDone = NO;
     self.totalSignatureTime = 0;
     self.clipsToBounds = YES;
@@ -308,7 +309,6 @@
     [self addGestureRecognizer:longPressGestureRecognizer];
     self.tracedPointsCollection = [NSMutableArray new];
     self.bezierPath = [UIBezierPath bezierPath];
-    
 }
 
 - (void)initializeViewLayer {
@@ -316,13 +316,8 @@
     drawingLayer.fillColor = [UIColor clearColor].CGColor;
     drawingLayer.lineWidth = self.signatureStrokeSize;
     drawingLayer.strokeColor = self.signatureStrokeColor.CGColor;
-    drawingLayer.fillColor = [UIColor clearColor].CGColor;
     self.viewLayer = drawingLayer;
     [self.layer addSublayer:self.viewLayer];
-}
-
-- (void)setSignatureFillColor:(UIColor*)signatureFillColor {
-    self.viewLayer.fillColor = signatureFillColor.CGColor;
 }
 
 - (UIImage*)outputSignatureImage {
@@ -360,7 +355,7 @@
     if (self.originalTracedPointsCollection.count) {
         NSValue* pointValue = [self.originalTracedPointsCollection firstObject];
         [self.tracedPointsCollection addObject:pointValue];
-        [self setNeedsDisplayInRect:[self getRectFromPoint:[pointValue CGPointValue]]];
+        [self setNeedsDisplayInRect:[self rectFromPoint:[pointValue CGPointValue]]];
         [self.originalTracedPointsCollection removeObjectAtIndex:0];
     } else {
         [self.timer invalidate];
@@ -371,6 +366,9 @@
     }
 }
 
+- (void)setSignatureFillColor:(UIColor*)signatureFillColor {
+    self.viewLayer.fillColor = signatureFillColor.CGColor;
+}
 
 - (void)updateStrokeColorWithColor:(UIColor*)updatedStrokeColor {
     self.signatureStrokeColor = updatedStrokeColor;

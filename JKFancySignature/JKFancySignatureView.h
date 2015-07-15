@@ -9,18 +9,11 @@
 #import <UIKit/UIKit.h>
 @class JKFancySignatureVideo;
 
-enum {
-    SignatureModePlain,
-    SignatureModeImage
-    
-};
-typedef NSInteger SignatureMode;
-
 @interface JKFancySignatureView : UIView
 
-@property (assign, nonatomic) SignatureMode selectedSignatureMode;
 @property (strong, nonatomic) UIColor* signatureFillColor;
 @property (strong, nonatomic) NSString* videoFileName;
+
 typedef void (^VideoRecordingCompletionBlock)(JKFancySignatureVideo* signatureVideoObject);
 @property (strong, nonatomic) VideoRecordingCompletionBlock videoRecordingCompletion;
 typedef void (^VideoRecordingErrorBlock)(NSError* error);
@@ -28,17 +21,18 @@ typedef void (^VideoRecordingErrorBlock)(NSError* error);
 
 - (instancetype)initWithStrokeSize:(CGFloat)signatureStrokeSize andSignatureStrokeColor:(UIColor*)signatureStrokeColor;
 - (instancetype)initWithStrokeSize:(CGFloat)signatureStrokeSize andSignatureImage:(UIImage*)signatureImage;
-- (void)updateStrokeColorWithColor:(UIColor*)updatedStrokeColor;
-- (void)updateStrokeSizeWithSize:(CGFloat)strokeSize;
-- (void)updateSignatureImageWithImage:(UIImage*)signatureImage;
 
-- (void)clearSignature;
 - (void)markSignatureDone;
 - (UIImage*)outputSignatureImage;
 - (void)undoSignature;
-- (void)createNewSignature;
+- (void)clearPreviousSignature;
+
 - (void)tracePathWithLine;
 - (void)tracePathWithPoint;
 - (void)createVideoForCurrentSignatureWithCompletionBlock:(void (^)(JKFancySignatureVideo* outputVideoObject))completion andErrorBlock:(void (^)(NSError* error))error;
+
+- (void)updateStrokeColorWithColor:(UIColor*)updatedStrokeColor;
+- (void)updateStrokeSizeWithSize:(CGFloat)strokeSize;
+- (void)updateSignatureImageWithImage:(UIImage*)signatureImage;
 
 @end

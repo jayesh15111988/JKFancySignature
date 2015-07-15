@@ -38,7 +38,7 @@
                                 <rect key="frame" x="40" y="344" width="240" height="128"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rVQ-qB-kzL">
-                                <rect key="frame" x="103" y="237" width="115" height="30"/>
+                                <rect key="frame" x="179" y="237" width="115" height="30"/>
                                 <state key="normal" title="Create Video">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -53,6 +53,15 @@
                                 </state>
                                 <connections>
                                     <action selector="undoSignature:" destination="BYZ-38-t0r" eventType="touchUpInside" id="DhN-zZ-ZLq"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rdy-Pt-jEU">
+                                <rect key="frame" x="29" y="237" width="92" height="30"/>
+                                <state key="normal" title="Trace point">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="traceSignatureWithPoint:" destination="BYZ-38-t0r" eventType="touchUpInside" id="say-PO-gEc"/>
                                 </connections>
                             </button>
                         </subviews>

@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -16,8 +17,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0rf-Ta-7IH">
-                                <rect key="frame" x="222" y="292" width="72" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0rf-Ta-7IH">
+                                <rect key="frame" x="232" y="292" width="75" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="75" id="U0Z-bA-ucK"/>
+                                    <constraint firstAttribute="height" constant="30" id="ZMZ-Pr-1qI"/>
+                                </constraints>
                                 <state key="normal" title="New Sign">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -25,8 +30,12 @@
                                     <action selector="createNewSignature:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vhe-3d-eny"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MwP-D7-cmy">
-                                <rect key="frame" x="29" y="292" width="100" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MwP-D7-cmy">
+                                <rect key="frame" x="16" y="292" width="75" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="5j5-IP-SpX"/>
+                                    <constraint firstAttribute="width" constant="75" id="quP-KQ-57p"/>
+                                </constraints>
                                 <state key="normal" title="Sig Image">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -34,11 +43,18 @@
                                     <action selector="signatureImageAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5Rh-9i-cp8"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Ll-qo-ZVk">
-                                <rect key="frame" x="40" y="344" width="240" height="128"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8Ll-qo-ZVk">
+                                <rect key="frame" x="16" y="344" width="291" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="J0B-w6-p6f"/>
+                                </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rVQ-qB-kzL">
-                                <rect key="frame" x="179" y="237" width="115" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rVQ-qB-kzL">
+                                <rect key="frame" x="192" y="245" width="115" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Krp-Be-6ew"/>
+                                    <constraint firstAttribute="width" constant="115" id="xt9-uY-eX8"/>
+                                </constraints>
                                 <state key="normal" title="Create Video">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -46,8 +62,12 @@
                                     <action selector="createSignatureVideoAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0pB-lS-8FA"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zkP-qB-LPK">
-                                <rect key="frame" x="150" y="292" width="46" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zkP-qB-LPK">
+                                <rect key="frame" x="124" y="292" width="75" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="xDt-D9-wjk"/>
+                                    <constraint firstAttribute="width" constant="75" id="xSP-KH-oeq"/>
+                                </constraints>
                                 <state key="normal" title="Undo">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -55,8 +75,12 @@
                                     <action selector="undoSignature:" destination="BYZ-38-t0r" eventType="touchUpInside" id="DhN-zZ-ZLq"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rdy-Pt-jEU">
-                                <rect key="frame" x="29" y="237" width="92" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rdy-Pt-jEU">
+                                <rect key="frame" x="16" y="245" width="115" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="115" id="TX0-WG-urp"/>
+                                    <constraint firstAttribute="height" constant="30" id="uaL-cB-rfr"/>
+                                </constraints>
                                 <state key="normal" title="Trace point">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -66,6 +90,29 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="8Ll-qo-ZVk" secondAttribute="centerX" id="CkS-AQ-tOd"/>
+                            <constraint firstItem="zkP-qB-LPK" firstAttribute="centerX" secondItem="8Ll-qo-ZVk" secondAttribute="centerX" id="HlY-Lz-cg0"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="8Ll-qo-ZVk" secondAttribute="trailing" constant="-3" id="Hnl-Fx-5xQ"/>
+                            <constraint firstItem="8Ll-qo-ZVk" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="N1C-SB-qn0"/>
+                            <constraint firstItem="zkP-qB-LPK" firstAttribute="top" secondItem="rVQ-qB-kzL" secondAttribute="bottom" constant="17" id="O6A-Am-CSx"/>
+                            <constraint firstItem="8Ll-qo-ZVk" firstAttribute="trailing" secondItem="0rf-Ta-7IH" secondAttribute="trailing" id="OaZ-M9-y8s"/>
+                            <constraint firstItem="rVQ-qB-kzL" firstAttribute="trailing" secondItem="0rf-Ta-7IH" secondAttribute="trailing" id="Oyb-Tb-1Tg"/>
+                            <constraint firstItem="Rdy-Pt-jEU" firstAttribute="leading" secondItem="MwP-D7-cmy" secondAttribute="leading" id="VGB-Iq-C0x"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="8Ll-qo-ZVk" secondAttribute="bottom" constant="8" id="XaV-eL-VEk"/>
+                            <constraint firstItem="MwP-D7-cmy" firstAttribute="leading" secondItem="8Ll-qo-ZVk" secondAttribute="leading" id="YB3-i9-Zxn"/>
+                            <constraint firstItem="zkP-qB-LPK" firstAttribute="top" secondItem="Rdy-Pt-jEU" secondAttribute="bottom" constant="17" id="YhF-TY-k4L"/>
+                            <constraint firstItem="8Ll-qo-ZVk" firstAttribute="top" secondItem="zkP-qB-LPK" secondAttribute="bottom" constant="22" id="jff-Om-Z2Q"/>
+                            <constraint firstItem="8Ll-qo-ZVk" firstAttribute="top" secondItem="MwP-D7-cmy" secondAttribute="bottom" constant="22" id="mVi-Ve-cFP"/>
+                            <constraint firstAttribute="centerX" secondItem="zkP-qB-LPK" secondAttribute="centerX" id="px8-s5-JzF"/>
+                            <constraint firstItem="8Ll-qo-ZVk" firstAttribute="top" secondItem="0rf-Ta-7IH" secondAttribute="bottom" constant="22" id="zn5-Zm-UhL"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="px8-s5-JzF"/>
+                                <exclude reference="CkS-AQ-tOd"/>
+                            </mask>
+                        </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>

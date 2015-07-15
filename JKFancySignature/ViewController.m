@@ -18,11 +18,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.vi = [[JKFancySignatureView alloc] initWithStrokeSize:2.0 andSignatureStrokeColor:[UIColor blackColor]];
-    self.vi.videoFileName = @"jayesh";
+    self.vi = [[JKFancySignatureView alloc] initWithStrokeSize:2.0 andSignatureStrokeColor:[UIColor whiteColor]];
+    self.vi.videoFileName = @"apple_products_rock";
     //self.vi = [[JKFancySignatureView alloc] initWithStrokeSize:10.0 andSignatureImage:[UIImage imageNamed:@"airlinePlaceholder"]];
     self.vi.translatesAutoresizingMaskIntoConstraints = NO;
-    self.vi.backgroundColor = [UIColor lightGrayColor];
+    self.vi.backgroundColor = [UIColor blackColor];
     [self.view addSubview:self.vi];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_vi]|" options:kNilOptions metrics:kNilOptions views:NSDictionaryOfVariableBindings(_vi)]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[_vi(200)]" options:kNilOptions metrics:kNilOptions views:NSDictionaryOfVariableBindings(_vi)]];

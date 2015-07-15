@@ -74,6 +74,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		386073FC1B55F45E00C7281F /* Signature Classes */ = {
+			isa = PBXGroup;
+			children = (
+				38A4CBD41B503F9E00C4A7EC /* JKFancySignatureView.h */,
+				38A4CBD51B503F9E00C4A7EC /* JKFancySignatureView.m */,
+				38B672411B532BCF00F6F1F9 /* JKFancySignatureVideo.h */,
+				38B672421B532BCF00F6F1F9 /* JKFancySignatureVideo.m */,
+			);
+			name = "Signature Classes";
+			sourceTree = "<group>";
+		};
 		38A4CB9E1B4F634E00C4A7EC = {
 			isa = PBXGroup;
 			children = (
@@ -140,11 +151,8 @@
 		38A4CBD31B503F7B00C4A7EC /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				386073FC1B55F45E00C7281F /* Signature Classes */,
 				38EAACFF1B52C57200A3A912 /* Screen Recorder */,
-				38A4CBD41B503F9E00C4A7EC /* JKFancySignatureView.h */,
-				38A4CBD51B503F9E00C4A7EC /* JKFancySignatureView.m */,
-				38B672411B532BCF00F6F1F9 /* JKFancySignatureVideo.h */,
-				38B672421B532BCF00F6F1F9 /* JKFancySignatureVideo.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";

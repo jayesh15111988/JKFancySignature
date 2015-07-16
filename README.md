@@ -3,7 +3,16 @@ A Custom view to allow users to easily create, store and reproduce signature wit
 
 # Fancy Signature view to create dynamic signature and graphics
 
+
+<b><i>Simple Signature</i></b>
+
+
 ![alt text][FancySignatureViewDemoImage]
+
+
+<b><i>Custom Signature with image stroke</i></b>
+
+![alt text][FancySignatureViewCustomImageDemoImage]
 
 Fancy Signature view is an innovative way to create signature on screen. Besides, simple signatures with basic functionalities it also offers extended features for advanced apps.
 
@@ -44,6 +53,7 @@ Method to mark signature creation operation complete
 
 - ```- (void)undoSignature;```  
 Method to undo signature. This method does undo created signature with animation by sketching it backwards.
+Note that this feature is only available for regular signature.
 
 - ```- (void)clearPreviousSignature;```  
 To clear the previously made signature and prepare view for new one.
@@ -62,4 +72,7 @@ To create a video of signature creation. Can come handy as proof of creating sig
 
 > A Sample project is included with the library to demonstrate its working. This library is available to integrate into any iOS project with Cocoapods.
 
-[FancySignatureViewDemoImage]: https://github.com/jayesh15111988/JKFancySignature/blob/master/Demo/Signature_Demo.gif "JKFancySignature Demo"
+[FancySignatureViewDemoImage]: https://github.com/jayesh15111988/JKFancySignature/blob/master/Demo/Signature_Demo.gif "Simple Signature"
+
+[FancySignatureViewCustomImageDemoImage]:
+https://github.com/jayesh15111988/JKFancySignature/blob/master/Demo/Custom_Signature_Demo.gif "Custom Image Signature"

@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/jayesh15111988/JKFancySignature.git", :branch => "master" }
   s.source_files  = "JKFancySignature/Classes/**/*.{h,m}"
   #s.resource  = "icon.png"
-  #s.resources = "JKFancySignature/images/*.{png, jpg, jpeg}"
+  #s.resources = "JKFancySignature/Images/*.{png, jpg, jpeg}"
   s.requires_arc = true
 
 end

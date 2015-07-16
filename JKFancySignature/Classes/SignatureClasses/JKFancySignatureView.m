@@ -33,6 +33,7 @@ typedef NSInteger SignatureMode;
 @property (strong, nonatomic) UIColor* signatureStrokeColor;
 @property (assign, nonatomic) SignatureMode selectedSignatureMode;
 @property (assign, nonatomic) CGFloat signatureStrokeSize;
+@property (assign, nonatomic) CGFloat signaturePointsDistanceThreshold;
 @property (assign, nonatomic) double totalSignatureTime;
 @property (assign, nonatomic) BOOL isCreatingSignatureVideo;
 @property (assign, nonatomic) BOOL signatureDone;
@@ -77,9 +78,17 @@ typedef NSInteger SignatureMode;
         [self.bezierPath addLineToPoint:touchMovePoint];
         self.viewLayer.path = self.bezierPath.CGPath;
     } else {
-        [self.tracedPointsCollection addObject:[NSValue valueWithCGPoint:touchMovePoint]];
-        [self setNeedsDisplayInRect:[self rectFromPoint:touchMovePoint]];
+        
+        CGPoint lastPointInCollection = [[self.tracedPointsCollection lastObject] CGPointValue];
+        if ([self euclideanDistanceBetweenPoints:lastPointInCollection andSecondPoint:touchMovePoint] > self.signaturePointsDistanceThreshold) {
+            [self.tracedPointsCollection addObject:[NSValue valueWithCGPoint:touchMovePoint]];
+            [self setNeedsDisplayInRect:[self rectFromPoint:touchMovePoint]];
+        }
     }
+}
+
+- (double)euclideanDistanceBetweenPoints:(CGPoint)firstPoint andSecondPoint:(CGPoint)secondPoint {
+    return sqrt(pow(firstPoint.x - secondPoint.x, 2) + pow(firstPoint.y - secondPoint.y, 2));
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -257,8 +266,8 @@ typedef NSInteger SignatureMode;
     } else {
         if (self.tracedPointsCollection.count) {
             [self.tracedPointsCollection removeAllObjects];
-            [self setNeedsDisplay];
         }
+        [self setNeedsDisplay];
     }
 }
 
@@ -278,6 +287,7 @@ typedef NSInteger SignatureMode;
         self.selectedSignatureMode = SignatureModeImage;
         self.signatureImage = signatureImage;
         self.signatureStrokeSize = signatureStrokeSize;
+        self.signaturePointsDistanceThreshold = self.signatureStrokeSize;
         [self prepareForStartup];
     }
     return self;
@@ -343,9 +353,11 @@ typedef NSInteger SignatureMode;
         if (self.selectedSignatureMode == SignatureModePlain) {
             [self tracePathWithLine];
         } else {
-            [self clearSignature];
-            NSTimeInterval timeInterval = self.totalSignatureTime / self.originalTracedPointsCollection.count;
-            self.timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(drawPath:) userInfo:nil repeats:YES];
+            if (self.originalTracedPointsCollection.count) {
+                [self clearSignature];
+                NSTimeInterval timeInterval = self.totalSignatureTime / self.originalTracedPointsCollection.count;
+                self.timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(drawPath:) userInfo:nil repeats:YES];
+            }
         }
     }
 }
@@ -377,6 +389,7 @@ typedef NSInteger SignatureMode;
 - (void)updateStrokeSizeWithSize:(CGFloat)strokeSize {
     self.signatureStrokeSize = strokeSize;
     self.viewLayer.lineWidth = self.signatureStrokeSize;
+    self.signaturePointsDistanceThreshold = self.signatureStrokeSize;
 }
 
 - (void)updateSignatureImageWithImage:(UIImage*)signatureImage {

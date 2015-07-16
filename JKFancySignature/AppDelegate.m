@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Jayesh Kawli Backup. All rights reserved.
 //
 
-#import "AppDelegate.h"
-#import "SampleClass.h"
 #import <Foundation/Foundation.h>
+#import "AppDelegate.h"
+
 
 @interface AppDelegate ()
 
@@ -19,26 +19,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
-    SampleClass* s1 = [SampleClass new];
-    s1.val = 345;
-    
-    SampleClass* s2 = [SampleClass new];
-    s2.val = 97;
-    
-    SampleClass* s3 = [SampleClass new];
-    s3.val = 34;
-    
-    SampleClass* s4 = [SampleClass new];
-    s4.val = 11345;
-    
-    NSArray* col = @[s1, s2, s3, s4];
-    
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"val"
-                                                                   ascending:NO];
-    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-     NSArray* sort = [col sortedArrayUsingDescriptors:sortDescriptors];
-    
     return YES;
 }
 

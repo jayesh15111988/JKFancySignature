@@ -39,7 +39,6 @@
 - (IBAction)createSignatureVideoAction:(id)sender {
     [self.vi createVideoForCurrentSignatureWithCompletionBlock:^(JKFancySignatureVideo* outputVideoObject) {
         
-    
     } andErrorBlock:^(NSError *error) {
         
     }];

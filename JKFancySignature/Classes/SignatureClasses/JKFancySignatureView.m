@@ -275,6 +275,14 @@ typedef NSInteger SignatureMode;
     }
 }
 
+- (void)awakeFromNib {
+    // These are all Default values if you are initalizing view directly from storyboard. You can change individual attributes later.
+    self.selectedSignatureMode = SignatureModePlain;
+    self.signatureStrokeColor = [UIColor blackColor];
+    self.signatureStrokeSize = 5.0f;
+    [self prepareForStartup];
+}
+
 - (instancetype)initWithStrokeSize:(CGFloat)signatureStrokeSize andSignatureStrokeColor:(UIColor*)signatureStrokeColor {
     if (self = [super init]) {
         self.selectedSignatureMode = SignatureModePlain;

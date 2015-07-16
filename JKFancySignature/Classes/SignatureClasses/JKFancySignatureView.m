@@ -152,17 +152,20 @@ typedef NSInteger SignatureMode;
 }
 
 - (void)undoSignature {
-    [self markSignatureCompleteAndClearPreviousDrawing];
+    if (self.selectedSignatureMode == SignatureModePlain) {
+        [self markSignatureCompleteAndClearPreviousDrawing];
     
-    if (!self.progressLayer) {
-        [self setupProgressLayer];
-        [self setupAttributesForProgressLayer];
+        if (!self.progressLayer) {
+            [self setupProgressLayer];
+            [self setupAttributesForProgressLayer];
+        } else {
+            [self.progressLayer setPath: self.originalBezierPath.CGPath];
+            [self.layer addSublayer:self.progressLayer];
+        }
+        [self.progressLayer addAnimation:[self animationWithTypeName:@"lineAnimationRemoval" andDrawingOnScene:NO] forKey:nil];
     } else {
-        [self.progressLayer setPath: self.originalBezierPath.CGPath];
-        [self.layer addSublayer:self.progressLayer];
+        [self clearPreviousSignature];
     }
-    
-    [self.progressLayer addAnimation:[self animationWithTypeName:@"lineAnimationRemoval" andDrawingOnScene:NO] forKey:nil];
 }
 
 - (void)setupProgressLayer {
@@ -190,37 +193,39 @@ typedef NSInteger SignatureMode;
 }
 
 - (void)tracePathWithPoint {
-    [self completeSignatureCreationOperation];
-    self.signatureTraceLayer = [CALayer layer];
-    self.signatureTraceLayer.frame = CGRectMake(0, 0, self.signatureStrokeSize * 3, self.signatureStrokeSize * 3);
-    self.signatureTraceLayer.cornerRadius = self.signatureStrokeSize;
-    self.signatureTraceLayer.backgroundColor = [UIColor redColor].CGColor;
-    [self.layer addSublayer:self.signatureTraceLayer];
+    if (self.selectedSignatureMode == SignatureModePlain) {
+        [self completeSignatureCreationOperation];
+        self.signatureTraceLayer = [CALayer layer];
+        self.signatureTraceLayer.frame = CGRectMake(0, 0, self.signatureStrokeSize * 3, self.signatureStrokeSize * 3);
+        self.signatureTraceLayer.cornerRadius = self.signatureStrokeSize;
+        self.signatureTraceLayer.backgroundColor = [UIColor redColor].CGColor;
+        [self.layer addSublayer:self.signatureTraceLayer];
     
-    CABasicAnimation* colorChangeAnimation = [CABasicAnimation animation];
-    colorChangeAnimation.keyPath = @"backgroundColor";
-    colorChangeAnimation.toValue = (__bridge id) [UIColor blueColor].CGColor;
-    colorChangeAnimation.removedOnCompletion = YES;
+        CABasicAnimation* colorChangeAnimation = [CABasicAnimation animation];
+        colorChangeAnimation.keyPath = @"backgroundColor";
+        colorChangeAnimation.toValue = (__bridge id) [UIColor blueColor].CGColor;
+        colorChangeAnimation.removedOnCompletion = YES;
     
-    //Usually use this approach for perform rotation while animating stuff
-    CABasicAnimation* rotationAnimation = [CABasicAnimation animation];
-    rotationAnimation.keyPath = @"transform.rotation";
-    rotationAnimation.byValue = @(M_PI*2);
-    rotationAnimation.removedOnCompletion = YES;
+        //Usually use this approach for perform rotation while animating stuff
+        CABasicAnimation* rotationAnimation = [CABasicAnimation animation];
+        rotationAnimation.keyPath = @"transform.rotation";
+        rotationAnimation.byValue = @(M_PI*2);
+        rotationAnimation.removedOnCompletion = YES;
     
-    CAKeyframeAnimation* animation = [CAKeyframeAnimation animation];
-    animation.keyPath = @"position";
-    animation.path = self.originalBezierPath.CGPath;
-    animation.removedOnCompletion = YES;
-    animation.rotationMode = kCAAnimationRotateAuto;
+        CAKeyframeAnimation* animation = [CAKeyframeAnimation animation];
+        animation.keyPath = @"position";
+        animation.path = self.originalBezierPath.CGPath;
+        animation.removedOnCompletion = YES;
+        animation.rotationMode = kCAAnimationRotateAuto;
     
-    CAAnimationGroup* animationGroup = [CAAnimationGroup animation];
-    animationGroup.animations = @[animation];
-    animationGroup.duration = _totalSignatureTime * 2;
-    animationGroup.delegate = self;
-    animationGroup.removedOnCompletion = YES;
-    [animationGroup setValue:@"pointAnimation" forKey:@"type"];
-    [self.signatureTraceLayer addAnimation:animationGroup forKey:nil];
+        CAAnimationGroup* animationGroup = [CAAnimationGroup animation];
+        animationGroup.animations = @[animation];
+        animationGroup.duration = _totalSignatureTime * 2;
+        animationGroup.delegate = self;
+        animationGroup.removedOnCompletion = YES;
+        [animationGroup setValue:@"pointAnimation" forKey:@"type"];
+        [self.signatureTraceLayer addAnimation:animationGroup forKey:nil];
+    }
 }
 
 - (void)animationDidStop:(CAAnimation *)animation finished:(BOOL)finished {
@@ -233,7 +238,6 @@ typedef NSInteger SignatureMode;
             [self.signatureTraceLayer removeFromSuperlayer];
         } else if ([[animation valueForKey:@"type"] isEqualToString:@"lineAnimationRemoval"]) {
             [self.progressLayer removeFromSuperlayer];
-            //[self clearSignature];
         }
     }
 }

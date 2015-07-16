@@ -18,9 +18,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //self.vi = [[JKFancySignatureView alloc] initWithStrokeSize:2.0 andSignatureStrokeColor:[UIColor whiteColor]];
-    //self.vi.videoFileName = @"apple_products_rock";
-    self.vi = [[JKFancySignatureView alloc] initWithStrokeSize:10.0 andSignatureImage:[UIImage imageNamed:@"rf.jpg"]];
+    self.vi = [[JKFancySignatureView alloc] initWithStrokeSize:2.0 andSignatureStrokeColor:[UIColor whiteColor]];
+    self.vi.videoFileName = @"apple_products_rock";
+    //self.vi = [[JKFancySignatureView alloc] initWithStrokeSize:10.0 andSignatureImage:[UIImage imageNamed:@"rf.jpg"]];
     self.vi.translatesAutoresizingMaskIntoConstraints = NO;
     self.vi.backgroundColor = [UIColor blackColor];
     [self.view addSubview:self.vi];

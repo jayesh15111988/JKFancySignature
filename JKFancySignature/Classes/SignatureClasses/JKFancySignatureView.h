@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-@class JKFancySignatureVideo;
+#import "JKFancySignatureVideo.h"
 
 enum { SignatureModePlain, SignatureModeImage };
 typedef NSInteger SignatureMode;

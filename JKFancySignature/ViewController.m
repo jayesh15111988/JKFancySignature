@@ -22,7 +22,8 @@
     self.vi.videoFileName = @"apple_products_rock";
     //self.vi = [[JKFancySignatureView alloc] initWithStrokeSize:10.0 andSignatureImage:[UIImage imageNamed:@"rf.jpg"]];
     self.vi.translatesAutoresizingMaskIntoConstraints = NO;
-    self.vi.backgroundColor = [UIColor blackColor];
+    [self.vi updateEraserSizeWithValue:2.0];
+    [self.vi updateBackgroundColorWithColor:[UIColor blackColor]];
     [self.view addSubview:self.vi];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_vi]|" options:kNilOptions metrics:kNilOptions views:NSDictionaryOfVariableBindings(_vi)]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[_vi(200)]" options:kNilOptions metrics:kNilOptions views:NSDictionaryOfVariableBindings(_vi)]];
@@ -52,5 +53,8 @@
     [self.vi tracePathWithPoint];
 }
 
+- (IBAction)updateSignatureModeButtonPressed:(id)sender {
+    self.vi.usingEraser = !self.vi.usingEraser;
+}
 
 @end

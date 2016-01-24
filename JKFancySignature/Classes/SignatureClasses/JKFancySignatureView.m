@@ -435,6 +435,14 @@
     self.viewLayer.strokeColor = self.signatureStrokeColor.CGColor;
 }
 
+- (void)updateLineCapWithValue:(NSString*)lineCapValue {
+    self.viewLayer.lineCap = lineCapValue;
+}
+
+- (void)updateLineDashPattern:(NSArray*)lineDashPattern {
+    self.viewLayer.lineDashPattern = lineDashPattern;
+}
+
 - (void)updateBackgroundColorWithColor:(UIColor*)backgroundColor {
     self.backgroundColor = backgroundColor;
     self.signatureEraserLayer.strokeColor = backgroundColor.CGColor;

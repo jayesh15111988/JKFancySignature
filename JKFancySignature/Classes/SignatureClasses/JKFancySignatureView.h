@@ -9,7 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "JKFancySignatureVideo.h"
 
-enum { SignatureModePlain, SignatureModeImage };
+enum {
+    SignatureModePlain,
+    SignatureModeImage
+};
+
 typedef NSInteger SignatureMode;
 
 @interface JKFancySignatureView : UIView
@@ -38,6 +42,8 @@ typedef void (^VideoRecordingErrorBlock) (NSError* error);
             (void (^) (JKFancySignatureVideo* outputVideoObject))completion
                                             andErrorBlock:(void (^) (NSError* error))error;
 
+- (void)updateLineCapWithValue:(NSString*)lineCapValue;
+- (void)updateLineDashPattern:(NSArray*)lineDashPattern;
 - (void)updateStrokeColorWithColor:(UIColor*)updatedStrokeColor;
 - (void)updateStrokeSizeWithSize:(CGFloat)strokeSize;
 - (void)updateSignatureImageWithImage:(UIImage*)signatureImage;

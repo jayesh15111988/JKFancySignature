@@ -8,7 +8,6 @@
 
 #import "JKFancySignatureVideo.h"
 
-
 @implementation JKFancySignatureVideo
 
 - (instancetype)initWithDictionary:(NSDictionary *)videoFileAttributesDictionary {

@@ -354,6 +354,8 @@
     self.tracedPointsCollection = [NSMutableArray new];
     self.bezierPath = [UIBezierPath bezierPath];
     self.eraserBezierPath = [UIBezierPath bezierPath];
+    self.lineDashPatternsCollection = @[@[], @[@2, @2], @[@6, @2], @[@8, @2], @[@6, @4, @2, @4], @[@10, @4, @6, @4], @[@8, @4, @2, @4, @2, @4], @[@8, @4, @8, @4, @2, @4]];
+    self.viewLayer.lineDashPattern = self.lineDashPatternsCollection[7];
 }
 
 - (void)initializeViewLayer {
@@ -439,8 +441,8 @@
     self.viewLayer.lineCap = lineCapValue;
 }
 
-- (void)updateLineDashPattern:(NSArray*)lineDashPattern {
-    self.viewLayer.lineDashPattern = lineDashPattern;
+- (void)updateLineDashPatternWithPattern:(LineDashPattern)lineDashPattern {
+    self.viewLayer.lineDashPattern = self.lineDashPatternsCollection[lineDashPattern];
 }
 
 - (void)updateBackgroundColorWithColor:(UIColor*)backgroundColor {

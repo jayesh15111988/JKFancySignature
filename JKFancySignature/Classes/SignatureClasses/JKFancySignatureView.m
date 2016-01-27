@@ -32,6 +32,7 @@
 @property (assign, nonatomic) double totalSignatureTime;
 @property (assign, nonatomic) BOOL isCreatingSignatureVideo;
 @property (assign, nonatomic) BOOL signatureDone;
+@property (assign, nonatomic) LineDashPattern selectedSignatureLineDashPattern;
 
 @end
 
@@ -354,8 +355,18 @@
     self.tracedPointsCollection = [NSMutableArray new];
     self.bezierPath = [UIBezierPath bezierPath];
     self.eraserBezierPath = [UIBezierPath bezierPath];
-    self.lineDashPatternsCollection = @[@[], @[@2, @2], @[@6, @2], @[@8, @2], @[@6, @4, @2, @4], @[@10, @4, @6, @4], @[@8, @4, @2, @4, @2, @4], @[@8, @4, @8, @4, @2, @4]];
+    self.lineDashPatternsCollection = @[
+        @[],
+        @[ @2, @2 ],
+        @[ @6, @2 ],
+        @[ @8, @2 ],
+        @[ @6, @4, @2, @4 ],
+        @[ @10, @4, @6, @4 ],
+        @[ @8, @4, @2, @4, @2, @4 ],
+        @[ @8, @4, @8, @4, @2, @4 ]
+    ];
     self.viewLayer.lineDashPattern = self.lineDashPatternsCollection[7];
+    self.selectedSignatureLineDashPattern = LineDashPatternRegular;
 }
 
 - (void)initializeViewLayer {
@@ -442,7 +453,14 @@
 }
 
 - (void)updateLineDashPatternWithPattern:(LineDashPattern)lineDashPattern {
-    self.viewLayer.lineDashPattern = self.lineDashPatternsCollection[lineDashPattern];
+    NSArray* selectedDashPattern = self.lineDashPatternsCollection[lineDashPattern];
+    NSMutableArray* updatedLineDashPatternArray = [NSMutableArray new];
+    for (NSNumber* lineDashPatternNumber in selectedDashPattern) {
+        NSNumber* updatedDashPattern = @((self.signatureStrokeSize / 0.75) * [lineDashPatternNumber integerValue]);
+        [updatedLineDashPatternArray addObject:updatedDashPattern];
+    }
+    self.selectedSignatureLineDashPattern = lineDashPattern;
+    self.viewLayer.lineDashPattern = updatedLineDashPatternArray;
 }
 
 - (void)updateBackgroundColorWithColor:(UIColor*)backgroundColor {
@@ -454,6 +472,7 @@
     self.signatureStrokeSize = strokeSize;
     self.viewLayer.lineWidth = self.signatureStrokeSize;
     self.signaturePointsDistanceThreshold = self.signatureStrokeSize;
+    [self updateLineDashPatternWithPattern:self.selectedSignatureLineDashPattern];
 }
 
 - (void)updateEraserSizeWithValue:(CGFloat)eraserSize {

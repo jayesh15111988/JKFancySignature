@@ -51,7 +51,7 @@ typedef void (^VideoRecordingErrorBlock) (NSError* error);
 - (void)tracePathWithLine;
 - (void)tracePathWithPoint;
 - (void)createVideoForCurrentSignatureWithCompletionBlock:
-            (void (^) (JKFancySignatureVideo* outputVideoObject))completion
+(void (^) (JKFancySignatureVideo* outputVideoObject))completion
                                             andErrorBlock:(void (^) (NSError* error))error;
 
 - (void)updateLineCapWithValue:(NSString*)lineCapValue;

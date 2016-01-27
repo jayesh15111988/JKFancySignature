@@ -141,6 +141,7 @@
     if (!self.progressLayer) {
         [self setupProgressLayer];
     }
+    [self updateProgressLayerProperties];
 
     [self setupAttributesForProgressLayer];
     [self.progressLayer addAnimation:[self animationWithTypeName:@"lineAnimation" andDrawingOnScene:YES] forKey:nil];
@@ -170,11 +171,22 @@
             [self.progressLayer setPath:self.originalBezierPath.CGPath];
             [self.layer addSublayer:self.progressLayer];
         }
+
+        [self updateProgressLayerProperties];
+
         [self.progressLayer addAnimation:[self animationWithTypeName:@"lineAnimationRemoval" andDrawingOnScene:NO]
                                   forKey:nil];
     } else {
         [self clearPreviousSignature];
     }
+}
+
+- (void)updateProgressLayerProperties {
+    self.progressLayer.fillColor = self.viewLayer.fillColor;
+    self.progressLayer.lineWidth = self.viewLayer.lineWidth;
+    self.progressLayer.strokeColor = self.viewLayer.strokeColor;
+    self.progressLayer.lineDashPattern = self.viewLayer.lineDashPattern;
+    self.progressLayer.lineCap = self.viewLayer.lineCap;
 }
 
 - (void)setupProgressLayer {
@@ -365,8 +377,8 @@
         @[ @8, @4, @2, @4, @2, @4 ],
         @[ @8, @4, @8, @4, @2, @4 ]
     ];
-    self.viewLayer.lineDashPattern = self.lineDashPatternsCollection[7];
     self.selectedSignatureLineDashPattern = LineDashPatternRegular;
+    self.viewLayer.lineDashPattern = self.lineDashPatternsCollection[self.selectedSignatureLineDashPattern];
 }
 
 - (void)initializeViewLayer {

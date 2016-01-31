@@ -57,4 +57,8 @@
     self.vi.usingEraser = !self.vi.usingEraser;
 }
 
+- (IBAction)undoClearSignature:(id)sender {
+    [self.vi undoSignatureClear];
+}
+
 @end

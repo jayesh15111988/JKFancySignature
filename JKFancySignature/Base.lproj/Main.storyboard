@@ -100,9 +100,17 @@
                                     <action selector="updateSignatureModeButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cBc-nV-91A"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oGb-sm-zqV">
+                                <rect key="frame" x="224" y="200" width="89" height="30"/>
+                                <state key="normal" title="Undo Clear"/>
+                                <connections>
+                                    <action selector="undoClearSignature:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6wv-t5-hep"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="rVQ-qB-kzL" firstAttribute="top" secondItem="oGb-sm-zqV" secondAttribute="bottom" constant="15" id="6kP-Ce-ycT"/>
                             <constraint firstAttribute="centerX" secondItem="8Ll-qo-ZVk" secondAttribute="centerX" id="CkS-AQ-tOd"/>
                             <constraint firstItem="zkP-qB-LPK" firstAttribute="centerX" secondItem="8Ll-qo-ZVk" secondAttribute="centerX" id="HlY-Lz-cg0"/>
                             <constraint firstAttribute="trailingMargin" secondItem="8Ll-qo-ZVk" secondAttribute="trailing" constant="-3" id="Hnl-Fx-5xQ"/>
@@ -112,9 +120,11 @@
                             <constraint firstItem="rVQ-qB-kzL" firstAttribute="trailing" secondItem="0rf-Ta-7IH" secondAttribute="trailing" id="Oyb-Tb-1Tg"/>
                             <constraint firstItem="Rdy-Pt-jEU" firstAttribute="leading" secondItem="MwP-D7-cmy" secondAttribute="leading" id="VGB-Iq-C0x"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="8Ll-qo-ZVk" secondAttribute="bottom" constant="8" id="XaV-eL-VEk"/>
+                            <constraint firstAttribute="trailing" secondItem="oGb-sm-zqV" secondAttribute="trailing" constant="7" id="XfB-QK-ez8"/>
                             <constraint firstItem="MwP-D7-cmy" firstAttribute="leading" secondItem="8Ll-qo-ZVk" secondAttribute="leading" id="YB3-i9-Zxn"/>
                             <constraint firstItem="zkP-qB-LPK" firstAttribute="top" secondItem="Rdy-Pt-jEU" secondAttribute="bottom" constant="17" id="YhF-TY-k4L"/>
                             <constraint firstItem="Rdy-Pt-jEU" firstAttribute="top" secondItem="SXF-x5-S4r" secondAttribute="bottom" constant="15" id="b0r-gR-eUA"/>
+                            <constraint firstItem="oGb-sm-zqV" firstAttribute="leading" secondItem="SXF-x5-S4r" secondAttribute="trailing" constant="8" id="gqk-0L-PBj"/>
                             <constraint firstItem="8Ll-qo-ZVk" firstAttribute="top" secondItem="zkP-qB-LPK" secondAttribute="bottom" constant="22" id="jff-Om-Z2Q"/>
                             <constraint firstItem="8Ll-qo-ZVk" firstAttribute="top" secondItem="MwP-D7-cmy" secondAttribute="bottom" constant="22" id="mVi-Ve-cFP"/>
                             <constraint firstAttribute="centerX" secondItem="zkP-qB-LPK" secondAttribute="centerX" id="px8-s5-JzF"/>

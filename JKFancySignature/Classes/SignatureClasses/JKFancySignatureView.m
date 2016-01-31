@@ -17,6 +17,7 @@
 @property (strong, nonatomic) NSDate* operationStartDate;
 @property (strong, nonatomic) NSDate* operationEndDate;
 @property (copy, nonatomic) UIBezierPath* bezierPath;
+@property (copy, nonatomic) UIBezierPath* backupBezierPath;
 @property (copy, nonatomic) UIBezierPath* originalBezierPath;
 @property (copy, nonatomic) UIBezierPath* eraserBezierPath;
 @property (strong, nonatomic) CALayer* signatureTraceLayer;
@@ -55,6 +56,7 @@
 
 - (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event {
 
+    [self.backupBezierPath removeAllPoints];
     if (self.signatureDone) {
         [self clearPreviousSignature];
     }
@@ -133,6 +135,13 @@
         [self.originalTracedPointsCollection removeAllObjects];
         [self setNeedsDisplay];
     }
+}
+
+- (void)undoSignatureClear {
+    // Undoes the previous signature clear operation. Signature or painting will be redrawn again.
+    self.bezierPath = self.backupBezierPath;
+    [self.backupBezierPath removeAllPoints];
+    self.viewLayer.path = self.bezierPath.CGPath;
 }
 
 - (void)tracePathWithLine {
@@ -288,10 +297,16 @@
 
 - (void)clearSignature {
     if (self.selectedSignatureMode == SignatureModePlain) {
-        [self.bezierPath removeAllPoints];
-        self.viewLayer.path = self.bezierPath.CGPath;
-        [self.eraserBezierPath removeAllPoints];
-        self.signatureEraserLayer.path = self.eraserBezierPath.CGPath;
+        if (!self.bezierPath.empty) {
+            self.backupBezierPath = self.bezierPath;
+            [self.bezierPath removeAllPoints];
+            self.viewLayer.path = self.bezierPath.CGPath;
+        }
+
+        if (!self.eraserBezierPath.empty) {
+            [self.eraserBezierPath removeAllPoints];
+            self.signatureEraserLayer.path = self.eraserBezierPath.CGPath;
+        }
     } else {
         if (self.tracedPointsCollection.count) {
             [self.tracedPointsCollection removeAllObjects];

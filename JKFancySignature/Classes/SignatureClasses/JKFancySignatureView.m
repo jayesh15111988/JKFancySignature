@@ -126,6 +126,7 @@
     self.signatureDone = NO;
 
     if (self.selectedSignatureMode == SignatureModePlain) {
+        self.backupBezierPath = self.bezierPath;
         [self.bezierPath removeAllPoints];
         [self.originalBezierPath removeAllPoints];
         [self.eraserBezierPath removeAllPoints];
@@ -136,6 +137,7 @@
         [self.originalTracedPointsCollection removeAllObjects];
         [self setNeedsDisplay];
     }
+    self.isSignatureEmpty = YES;
 }
 
 - (void)undoSignatureClear {
@@ -143,6 +145,7 @@
     self.bezierPath = self.backupBezierPath;
     [self.backupBezierPath removeAllPoints];
     self.viewLayer.path = self.bezierPath.CGPath;
+    self.isSignatureEmpty = NO;
 }
 
 - (void)tracePathWithLine {

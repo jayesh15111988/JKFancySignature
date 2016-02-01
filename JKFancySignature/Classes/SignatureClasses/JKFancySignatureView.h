@@ -39,6 +39,7 @@ typedef void (^VideoRecordingCompletionBlock) (JKFancySignatureVideo* signatureV
 typedef void (^VideoRecordingErrorBlock) (NSError* error);
 @property (strong, nonatomic) VideoRecordingErrorBlock videoRecordingErrorOperation;
 @property (assign, nonatomic) SignatureMode selectedSignatureMode;
+@property (assign, nonatomic) BOOL isSignatureEmpty;
 
 - (instancetype)initWithStrokeSize:(CGFloat)signatureStrokeSize andSignatureStrokeColor:(UIColor*)signatureStrokeColor;
 - (instancetype)initWithStrokeSize:(CGFloat)signatureStrokeSize andSignatureImage:(UIImage*)signatureImage;

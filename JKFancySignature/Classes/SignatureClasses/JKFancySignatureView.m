@@ -73,6 +73,7 @@
     } else {
         [self.tracedPointsCollection addObject:[NSValue valueWithCGPoint:touchBeginPoint]];
     }
+    self.isSignatureEmpty = NO;
 }
 
 - (void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event {
@@ -313,6 +314,7 @@
         }
         [self setNeedsDisplay];
     }
+    self.isSignatureEmpty = YES;
 }
 
 - (void)awakeFromNib {
